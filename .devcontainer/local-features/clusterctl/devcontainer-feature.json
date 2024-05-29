@@ -1,0 +1,11 @@
+{
+	"id": "clusterctl",
+	"name": "installs clusterctl",
+	"options": {
+		"username": {
+			"type": "string",
+			"default": "",
+			"description": "Enter name of non-root user to configure or blank to use remoteUser"
+		}
+	}
+}

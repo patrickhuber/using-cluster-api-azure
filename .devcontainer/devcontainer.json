@@ -15,7 +15,8 @@
 			"helm": "latest",
 			"minikube": "none"
 		},
-		"./local-features/copy-kube-config": {}
+		"./local-features/copy-kube-config": {},
+		"./local-features/clusterctl":{}
 	},
 
 	"remoteEnv": {
