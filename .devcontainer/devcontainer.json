@@ -16,7 +16,8 @@
 			"minikube": "none"
 		},
 		"./local-features/copy-kube-config": {},
-		"./local-features/clusterctl":{}
+		"./local-features/clusterctl":{},
+		"./local-features/azure-cli":{}
 	},
 
 	"remoteEnv": {

@@ -1,0 +1,11 @@
+{
+	"id": "azure-cli",
+	"name": "installs azure-cli",
+	"options": {
+		"username": {
+			"type": "string",
+			"default": "",
+			"description": "Enter name of non-root user to configure or blank to use remoteUser"
+		}
+	}
+}

@@ -1,0 +1,16 @@
+apiVersion: wrangle/v1
+kind: Config
+metadata: {}
+spec:
+  feeds: []
+  stores:
+  - name: default
+    type: keyring
+    properties:
+      service: azure.clusterapi
+  env:
+    AZURE_SUBSCRIPTION_ID: ((azure_subscription_id))
+    AZURE_CLUSTER_IDENTITY_SECRET_NAME: cluster_identity_secret
+    CLUSTER_IDENTITY_NAME: cluster_identity
+    AZURE_CLUSTER_IDENTITY_SECRET_NAMESPACE: cluster_identity
+  packages: []
