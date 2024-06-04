@@ -4,7 +4,7 @@ metadata:
   name: coredns
   namespace: kube-system
 data:
-  Corefile: |    
+  Corefile: |
     login.microsoftonline.com {
       forward . 1.1.1.1
     }
