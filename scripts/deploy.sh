@@ -25,7 +25,11 @@ export AZURE_CLUSTER_IDENTITY_SECRET_NAMESPACE="default"
 kubectl create secret generic "${AZURE_CLUSTER_IDENTITY_SECRET_NAME}" \
   --from-literal=clientSecret="${AZURE_CLIENT_SECRET}" \
   --namespace "${AZURE_CLUSTER_IDENTITY_SECRET_NAMESPACE}" \
-  --dry-run=client -o yaml | kubectl apply -f -
+  --dry-run=client -o yaml \
+  | kubectl apply -f -
+
+# patch coredns
+kubectl apply -f coredns.yml
 
 # Finally, initialize the management cluster
 clusterctl init --infrastructure azure
@@ -49,7 +53,5 @@ clusterctl generate cluster foundation \
   --infrastructure azure \
   --kubernetes-version v1.30.1 \
   --control-plane-machine-count 1 \
-  --worker-machine-count 1 > quickstart-cluster.yml
-
-# create the cluster
-kubectl apply -f quickstart-cluster.yml
+  --worker-machine-count 1 \
+  | kubectl apply -f -
