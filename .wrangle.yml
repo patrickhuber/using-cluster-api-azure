@@ -2,7 +2,6 @@ apiVersion: wrangle/v1
 kind: Config
 metadata: {}
 spec:
-  feeds: []
   stores:
   - name: default
     type: keyring
