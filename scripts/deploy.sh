@@ -19,6 +19,7 @@ export AZURE_CLIENT_SECRET_B64="$(echo -n "$AZURE_CLIENT_SECRET" | base64 | tr -
 export AZURE_CLUSTER_IDENTITY_SECRET_NAME="cluster-identity-secret"
 export CLUSTER_IDENTITY_NAME="cluster-identity"
 export AZURE_CLUSTER_IDENTITY_SECRET_NAMESPACE="default"
+export EXP_MACHINE_POOL=true
 
 # Create a secret to include the password of the Service Principal identity created in Azure
 # This secret will be referenced by the AzureClusterIdentity used by the AzureCluster
@@ -44,14 +45,16 @@ export AZURE_NODE_MACHINE_TYPE="Standard_B2s"
 # [Optional] Select resource group. The default value is ${CLUSTER_NAME}.
 export AZURE_RESOURCE_GROUP="foundation"
 
-# initialize management cluster
-clusterctl init --infrastructure azure --wait-providers
-
 # generate configuration
 # make sure quickstart-cluster.yml is in the .gitignore
 clusterctl generate cluster foundation \
   --infrastructure azure \
   --kubernetes-version v1.30.1 \
+  --flavor machinepool \
   --control-plane-machine-count 1 \
-  --worker-machine-count 1 \
-  | kubectl apply -f -
+  --worker-machine-count 1 > quickstart-cluster.yml
+
+# Wait for CAPZ deployments
+kubectl wait --for=condition=Available --timeout=5m -n capz-system deployment --all
+
+kubectl apply -f quickstart-cluster.yml
