@@ -47,7 +47,7 @@ export AZURE_RESOURCE_GROUP="foundation"
 
 # generate configuration
 # make sure quickstart-cluster.yml is in the .gitignore
-clusterctl generate cluster foundation \
+clusterctl generate cluster management \
   --infrastructure azure \
   --kubernetes-version v1.30.1 \
   --flavor machinepool \

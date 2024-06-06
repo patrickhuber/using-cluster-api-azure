@@ -17,7 +17,8 @@
 		},
 		"./local-features/copy-kube-config": {},
 		"./local-features/clusterctl":{},
-		"./local-features/azure-cli":{}
+		"./local-features/azure-cli":{},
+		"./local-features/helm":{}
 	},
 
 	"remoteEnv": {
