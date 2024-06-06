@@ -55,6 +55,9 @@ clusterctl generate cluster management \
   --worker-machine-count 1 > quickstart-cluster.yml
 
 # Wait for CAPZ deployments
+echo "Waiting for CAPZ deployment to be Available..."
 kubectl wait --for=condition=Available --timeout=5m -n capz-system deployment --all
 
 kubectl apply -f quickstart-cluster.yml
+
+# Wait for management cluster to be Available
