@@ -6,19 +6,12 @@
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
 
 	"features": {
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
-			"enableNonRootDocker": "true",
-			"moby": "true"
-		},
-		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
-			"version": "1.23",
-			"helm": "latest",
-			"minikube": "none"
-		},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+		"ghcr.io/devcontainers-contrib/features/terraform-asdf:2": {},
 		"./local-features/copy-kube-config": {},
 		"./local-features/clusterctl":{},
-		"./local-features/azure-cli":{},
-		"./local-features/helm":{}
+		"./local-features/azure-cli":{}
 	},
 
 	"remoteEnv": {
@@ -37,8 +30,20 @@
 			"source": "${env:HOME}${env:USERPROFILE}/.minikube",
 			"target": "/usr/local/share/minikube-localhost",
 			"type": "bind"
+		},
+		{
+			"source": "${env:HOME}${env:USERPROFILE}/.ssh",
+			"target": "/home/vscode/.ssh",			
+			"type": "bind"
 		}
-	]
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-azuretools.vscode-azureterraform"
+			]
+		}
+	}
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
