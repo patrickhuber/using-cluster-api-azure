@@ -4,7 +4,8 @@ resource "azurerm_public_ip" "default" {
   name                = "${var.name}PublicIP"
   location            = var.location
   resource_group_name = var.resource_group_name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 # Create network interface
@@ -17,8 +18,52 @@ resource "azurerm_network_interface" "default" {
     name                          = "${var.name}NicCfg"
     subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = var.public_ip ? azurerm_public_ip.default.0.id : null
   }
+}
+
+# Create a load balancer
+resource "azurerm_lb" "default" {
+  count = var.public_ip ? 1 : 0
+
+  name                = "${var.name}LB"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  sku                 = "Standard"
+
+  frontend_ip_configuration {
+    name                 = "PublicIPAddress"
+    public_ip_address_id = azurerm_public_ip.default.0.id
+  }
+}
+
+# Create a backend pool for the load balancer
+resource "azurerm_lb_backend_address_pool" "default" {
+  count           = var.public_ip ? 1 : 0
+  loadbalancer_id = azurerm_lb.default.0.id
+  name            = "pool"
+}
+
+# Associate Network Interface to the Backend Pool of the Load Balancer
+resource "azurerm_network_interface_backend_address_pool_association" "default" {
+  count = var.public_ip ? 1 : 0
+
+  network_interface_id    = azurerm_network_interface.default.id
+  ip_configuration_name   = azurerm_network_interface.default.ip_configuration.0.name
+  backend_address_pool_id = azurerm_lb_backend_address_pool.default.0.id
+}
+
+# Create a nat pool to translate port 8022 to 22
+resource "azurerm_lb_nat_pool" "default" {
+  count = var.public_ip ? 1 : 0
+
+  resource_group_name            = var.resource_group_name
+  loadbalancer_id                = azurerm_lb.default.0.id
+  name                           = "SampleApplicationPool"
+  protocol                       = "Tcp"  
+  frontend_port_start            = 8022
+  frontend_port_end              = 8023
+  backend_port                   = 22
+  frontend_ip_configuration_name = azurerm_lb.default.0.frontend_ip_configuration.0.name
 }
 
 # Create the network security group relationship

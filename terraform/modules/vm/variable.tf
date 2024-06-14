@@ -29,12 +29,12 @@ variable "subnet_id" {
 }
 
 variable "nsg" {
-  type        = object({
-    id = string
+  type = object({
+    id      = string
     enabled = bool
   })
-  default     = { 
-    id = null
+  default = {
+    id      = null
     enabled = false
   }
   description = "the network security group for this virutal machine"

@@ -5,7 +5,7 @@ terraform {
       version = "3.107.0"
     }
     azapi = {
-      source = "Azure/azapi"
+      source  = "Azure/azapi"
       version = "1.13.1"
     }
   }
@@ -17,6 +17,6 @@ provider "azurerm" {
   }
 }
 
-provider "azapi"{
-  
+provider "azapi" {
+
 }

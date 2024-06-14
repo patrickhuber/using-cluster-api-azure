@@ -50,8 +50,8 @@ module "jumpbox" {
   size = var.jumpbox_node_size
 
   subnet_id = module.network.subnet_ids[0]
-  nsg    = { 
-    id = azurerm_network_security_group.jumpbox.id 
+  nsg = {
+    id      = azurerm_network_security_group.jumpbox.id
     enabled = true
   }
   public_ip = true
