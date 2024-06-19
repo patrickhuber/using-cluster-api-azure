@@ -53,15 +53,14 @@ resource "azurerm_network_interface_backend_address_pool_association" "default" 
 }
 
 # Create a nat pool to translate port 8022 to 22
-resource "azurerm_lb_nat_pool" "default" {
+resource "azurerm_lb_nat_rule" "default" {
   count = var.public_ip ? 1 : 0
 
   resource_group_name            = var.resource_group_name
   loadbalancer_id                = azurerm_lb.default.0.id
-  name                           = "SampleApplicationPool"
+  name                           = "SSH"
   protocol                       = "Tcp"  
-  frontend_port_start            = 8022
-  frontend_port_end              = 8023
+  frontend_port                  = 8022
   backend_port                   = 22
   frontend_ip_configuration_name = azurerm_lb.default.0.frontend_ip_configuration.0.name
 }
