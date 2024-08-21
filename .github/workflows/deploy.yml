@@ -6,7 +6,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    names: deploy
+    name: deploy
     steps:
     - uses: actions/checkout@v4
     - name: Start minikube
