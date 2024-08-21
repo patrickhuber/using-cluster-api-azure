@@ -14,5 +14,13 @@ jobs:
     - name: Start minikube
       uses: medyagh/setup-minikube@latest
 
-    - name: try it out
-      run: ./scripts/apply.sh
+    - name: Install clusterctl
+      run: |
+         curl -L https://github.com/kubernetes-sigs/cluster-api/releases/download/v1.8.1/clusterctl-linux-amd64 -o clusterctl
+         chmod +x clusterctl
+         mv clusterctl /usr/local/bin/clusterctl
+
+    - name: Bootstrap Management Cluster
+      run: |
+        sudo chmod +x ./scripts/*.sh
+        ./scripts/apply.sh
