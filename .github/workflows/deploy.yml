@@ -8,8 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     name: deploy
     steps:
+
     - uses: actions/checkout@v4
+
     - name: Start minikube
       uses: medyagh/setup-minikube@latest
+
     - name: try it out
-      run: kubectl get pods -A
+      run: ./scripts/apply.sh
