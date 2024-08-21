@@ -1,0 +1,15 @@
+name: Deploy
+on: 
+  push:
+    branches:
+    - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    names: deploy
+    steps:
+    - uses: actions/checkout@v4
+    - name: Start minikube
+      uses: medyagh/setup-minikube@latest
+    - name: try it out
+      run: kubectl get pods -A

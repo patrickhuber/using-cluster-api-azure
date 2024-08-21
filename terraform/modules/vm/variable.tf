@@ -28,18 +28,6 @@ variable "subnet_id" {
   type = string
 }
 
-variable "nsg" {
-  type = object({
-    id      = string
-    enabled = bool
-  })
-  default = {
-    id      = null
-    enabled = false
-  }
-  description = "the network security group for this virutal machine"
-}
-
 variable "public_ip" {
   type    = bool
   default = false

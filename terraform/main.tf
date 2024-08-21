@@ -20,25 +20,6 @@ module "network" {
   depends_on = [azurerm_resource_group.management]
 }
 
-# Create Network Security Group and rule
-resource "azurerm_network_security_group" "jumpbox" {
-  name                = "nsgJumpbox"
-  location            = azurerm_resource_group.management.location
-  resource_group_name = azurerm_resource_group.management.name
-
-  security_rule {
-    name                       = "SSH"
-    priority                   = 1001
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
-
 module "jumpbox" {
   source = "./modules/vm"
 
@@ -50,10 +31,6 @@ module "jumpbox" {
   size = var.jumpbox_node_size
 
   subnet_id = module.network.subnet_ids[0]
-  nsg = {
-    id      = azurerm_network_security_group.jumpbox.id
-    enabled = true
-  }
   public_ip = true
 
   username      = var.username

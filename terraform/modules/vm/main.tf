@@ -21,6 +21,13 @@ resource "azurerm_network_interface" "default" {
   }
 }
 
+# Create Network Security Group
+resource "azurerm_network_security_group" "default" {
+  name                = "${var.name}Nsg"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+}
+
 # Create a load balancer
 resource "azurerm_lb" "default" {
   count = var.public_ip ? 1 : 0
@@ -60,16 +67,16 @@ resource "azurerm_lb_nat_rule" "default" {
   loadbalancer_id                = azurerm_lb.default.0.id
   name                           = "SSH"
   protocol                       = "Tcp"  
-  frontend_port                  = 8022
+  frontend_port                  = 222
   backend_port                   = 22
   frontend_ip_configuration_name = azurerm_lb.default.0.frontend_ip_configuration.0.name
+  
 }
 
 # Create the network security group relationship
-resource "azurerm_network_interface_security_group_association" "nsg" {
-  count                     = var.nsg.enabled ? 1 : 0
+resource "azurerm_network_interface_security_group_association" "nsg" {  
   network_interface_id      = azurerm_network_interface.default.id
-  network_security_group_id = var.nsg.enabled ? var.nsg.id : null
+  network_security_group_id = azurerm_network_security_group.default.id
 }
 
 # Create virtual machine
