@@ -61,5 +61,5 @@ kubectl wait --for=condition=Available --timeout=5m -n capz-system deployment --
 kubectl apply -f quickstart-cluster.yml
 
 # Wait for management cluster to be Available
-kubectl wait --for jsonpath='{.status.readyReplicas}'=3 KubeadmControlPlane --timeout=20m
+kubectl wait --for jsonpath='{.status.readyReplicas}'=3 KubeadmControlPlane/management-control-plane --timeout=20m
 
