@@ -11,7 +11,8 @@
 		"ghcr.io/devcontainers-contrib/features/terraform-asdf:2": {},
 		"./local-features/copy-kube-config": {},
 		"./local-features/clusterctl":{},
-		"./local-features/azure-cli":{}
+		"./local-features/azure-cli":{},
+		"./local-features/yq":{}
 	},
 
 	"remoteEnv": {
