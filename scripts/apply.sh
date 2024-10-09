@@ -43,16 +43,21 @@ export AZURE_CONTROL_PLANE_MACHINE_TYPE="Standard_B2s"
 export AZURE_NODE_MACHINE_TYPE="Standard_B2s"
 
 # [Optional] Select resource group. The default value is ${CLUSTER_NAME}.
-export AZURE_RESOURCE_GROUP="foundation"
+export AZURE_RESOURCE_GROUP="management"
+
+export CLUSTER_NAME="management"
 
 # generate configuration
 # make sure quickstart-cluster.yml is in the .gitignore
-clusterctl generate cluster management \
+clusterctl generate cluster ${CLUSTER_NAME} \
   --infrastructure azure \
   --kubernetes-version v1.30.1 \
   --flavor machinepool \
   --control-plane-machine-count 1 \
   --worker-machine-count 1 > quickstart-cluster.yml
+
+echo "change authentication to ServicePrincipal"
+yq -i "with(. | select(.kind == \"AzureClusterIdentity\"); .spec.type |= \"ServicePrincipal\" | .spec.clientSecret.name |= \"${AZURE_CLUSTER_IDENTITY_SECRET_NAME}\" | .spec.clientSecret.namespace |= \"${AZURE_CLUSTER_IDENTITY_SECRET_NAMESPACE}\")" quickstart-cluster.yml
 
 # Wait for CAPZ deployments
 echo "Waiting for CAPZ deployment to be Available..."
@@ -61,6 +66,19 @@ kubectl wait --for=condition=Available --timeout=5m -n capz-system deployment --
 kubectl apply -f quickstart-cluster.yml
 
 # Wait for management cluster to be Available
-echo "Waiting for KubeadmControlPlane to be Ready..."
-kubectl wait --for jsonpath='{.status.readyReplicas}'=3 KubeadmControlPlane/management-control-plane --timeout=20m
+echo "Waiting for Cluster to be Ready..."
+kubectl wait --for=condition=InfrastructureReady cluster ${CLUSTER_NAME}
 
+# fetch the workload cluster kubeconfig
+echo "Fetch the workload cluster kubeconfig"
+clusterctl get kubeconfig ${CLUSTER_NAME} > capi-quickstart.kubeconfig
+
+# install cloud provider
+echo "Install Azure Cloud Provider in workload cluster"
+helm install --kubeconfig=./capi-quickstart.kubeconfig --repo https://raw.githubusercontent.com/kubernetes-sigs/cloud-provider-azure/master/helm/repo cloud-provider-azure --generate-name --set infra.clusterName=capi-quickstart --set cloudControllerManager.clusterCIDR="192.168.0.0/16"
+
+# install calico CNI
+echo "Install Calico CNI in workload cluster"
+helm repo add projectcalico https://docs.tigera.io/calico/charts --kubeconfig=./capi-quickstart.kubeconfig && \
+helm install calico projectcalico/tigera-operator --kubeconfig=./capi-quickstart.kubeconfig -f https://raw.githubusercontent.com/kubernetes-sigs/cluster-api-provider-azure/main/templates/addons/calico/values.yaml --namespace tigera-operator --create-namespace
+kubectl --kubeconfig=./capi-quickstart.kubeconfig get nodes
