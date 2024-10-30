@@ -4,12 +4,12 @@ metadata: {}
 spec:
   stores:
   - name: default
-    type: keyring
+    type: azure.keyvault  
     properties:
-      service: azure.clusterapi
+      uri: https://clusterapi.vault.azure.net/
   env:
-    AZURE_SUBSCRIPTION_ID: ((azure_subscription_id))
-    AZURE_CLUSTER_IDENTITY_SECRET_NAME: cluster_identity_secret
-    CLUSTER_IDENTITY_NAME: cluster_identity
-    AZURE_CLUSTER_IDENTITY_SECRET_NAMESPACE: cluster_identity
+    AZURE_TENANT_ID: ((TenantID))
+    AZURE_SUBSCRIPTION_ID: ((SubscriptionID))
+    AZURE_CLIENT_ID: ((ClientID))
+    AZURE_CLIENT_SECRET: ((ClientSecret))
   packages: []

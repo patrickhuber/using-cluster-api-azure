@@ -34,3 +34,38 @@ The patch file below updates the coredns file using a config map to resolve logi
 ```bash
 kubectl apply -f coredns.yml
 ```
+
+### Azure Clusterapi Provider Troubleshooting
+
+https://capz.sigs.k8s.io/self-managed/troubleshooting
+
+```bash
+kubectl logs deploy/capz-controller-manager -n capz-system manager > capz-system-manager.log
+```
+
+#### Logs contain 'failed to init machine scope cache: failed to get default image: no VM image found for publisher "cncf-upstream" offer "capi" sku "ubuntu-2204-gen1" with Kubernetes version "v1.31.0\"'
+
+```bash
+az vm image list -p "cncf-upstream" -f "capi" -s "ubuntu-2204-gen1" --all
+```
+
+Verify the image is listed in the output. There will probably be several. 
+
+Grab the one with the highest version number, for example:
+
+```json
+{
+    "architecture": "x64",
+    "imageDeprecationStatus": {
+      "imageState": "Active",
+      "scheduledDeprecationTime": null
+    },
+    "offer": "capi",
+    "publisher": "cncf-upstream",
+    "sku": "ubuntu-2204-gen1",
+    "urn": "cncf-upstream:capi:ubuntu-2204-gen1:130.3.20240717",
+    "version": "130.3.20240717"
+}
+```
+
+The version number here is the maximum supported kubernetes version by capz, in this case "130.3.20240717" is Kubernetes version "1.30.3" due to the formatting search applied here: https://github.com/kubernetes-sigs/cluster-api-provider-azure/blob/0f48c52736a7baee690fba702e96f31711f2cfef/azure/services/virtualmachineimages/images.go#L170C20-L170C30 . A the time of writing this, I believe there is an effort to migrate away from marketplace images to shared image gallieries. 

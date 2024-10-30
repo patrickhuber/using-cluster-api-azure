@@ -1,2 +1,4 @@
 dist
 quickstart-cluster.yml
+capi-quickstart.kubeconfig
+capz-system-manager.log
