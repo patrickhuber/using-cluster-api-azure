@@ -9,6 +9,37 @@ The devcontainer contains all the dependencies outlined here https://cluster-api
 
 Follow the prerequisites here https://capz.sigs.k8s.io/topics/getting-started.html#prerequisites
 
+## variables
+
+See: https://cluster-api.sigs.k8s.io/clusterctl/commands/generate-cluster#variables
+
+```bash
+clusterctl generate cluster mycluster --infrastructure azure --list-variables
+```
+
+```
+Required Variables:
+  - AZURE_CLIENT_ID_USER_ASSIGNED_IDENTITY
+  - AZURE_CONTROL_PLANE_MACHINE_TYPE
+  - AZURE_LOCATION
+  - AZURE_NODE_MACHINE_TYPE
+  - AZURE_SUBSCRIPTION_ID
+  - AZURE_TENANT_ID
+  - CLUSTER_IDENTITY_NAME
+  - KUBERNETES_VERSION
+
+Optional Variables:
+  - AZURE_RESOURCE_GROUP         (defaults to "${CLUSTER_NAME}")
+  - AZURE_SSH_PUBLIC_KEY_B64     (defaults to "")
+  - AZURE_VNET_NAME              (defaults to "${CLUSTER_NAME}-vnet")
+  - CI_RG                        (defaults to "capz-ci")
+  - CLUSTER_IDENTITY_TYPE        (defaults to "WorkloadIdentity")
+  - CLUSTER_NAME                 (defaults to mycluster)
+  - CONTROL_PLANE_MACHINE_COUNT  (defaults to 1)
+  - USER_IDENTITY                (defaults to "cloud-provider-user-identity")
+  - WORKER_MACHINE_COUNT         (defaults to 0)
+```
+
 ## troubleshooting
 
 ### WSL2 CoreDNS issue

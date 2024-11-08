@@ -9,6 +9,7 @@
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
 		"ghcr.io/devcontainers-contrib/features/terraform-asdf:2": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"./local-features/copy-kube-config": {},
 		"./local-features/clusterctl":{},
 		"./local-features/azure-cli":{},
