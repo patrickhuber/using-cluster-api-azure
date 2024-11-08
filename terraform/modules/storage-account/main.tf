@@ -5,7 +5,7 @@ resource "random_id" "random_id" {
 
 # create storage account
 resource "azurerm_storage_account" "account" {
-  name                     = "sa${random_id.random_id.hex}"
+  name                     = "${var.name}${random_id.random_id.hex}"
   location                 = var.location
   resource_group_name      = var.resource_group_name
   account_tier             = var.account_tier

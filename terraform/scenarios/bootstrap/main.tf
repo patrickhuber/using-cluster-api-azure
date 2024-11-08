@@ -47,5 +47,11 @@ module "github_federated_identity" {
     scope = data.azurerm_subscription.current.id
     } 
   ]
+}
 
+module "state_store" {
+  source = "../../modules/storage-account"
+  resource_group_name = azurerm_resource_group.default.name
+  location = var.location 
+  name = "state" 
 }
