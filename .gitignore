@@ -4,5 +4,3 @@ capi-quickstart.kubeconfig
 capz-system-manager.log
 sa.pub
 sa.key
-.terraform
-terraform.tfvars
