@@ -16,6 +16,9 @@ jobs:
 
     name: deploy
     steps:
+      
+    - name: Create k8s Kind Cluster
+      uses: helm/kind-action@v1
 
     - name: Azure CLI Login
       uses: azure/login@v2
